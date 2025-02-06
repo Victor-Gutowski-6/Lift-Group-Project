@@ -1,6 +1,7 @@
 import time
 from algorithms import (
-    scan
+    scan,
+    look
 )
 
 '''
