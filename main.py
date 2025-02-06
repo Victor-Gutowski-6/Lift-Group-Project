@@ -1,7 +1,10 @@
 import time
 from algorithms import (
+    SafetyChecks,
     scan,
-    look
+    look,
+    AskDirection,
+    MyAlgorithm
 )
 
 '''
