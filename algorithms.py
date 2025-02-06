@@ -8,8 +8,8 @@ def SafetyChecks():
     
     Weight_Limit = data["TechnicalComponents"]["Weight_Limit"]
     People_Limit = data["TechnicalComponents"]["People_Limit"]
-    Total_Weight = 11000 # Create a function that calculates the weight of the people CURRENTLY in the elevator
-    Total_People = 11 # Create a function that calculates how many people are in the elevator
+    Total_Weight = 1000 # Create a function that calculates the weight of the people CURRENTLY in the elevator
+    Total_People = 8 # Create a function that calculates how many people are in the elevator
 
 
     print("⦿The maximum weight limit is 1500kg")
@@ -19,13 +19,21 @@ def SafetyChecks():
     print("Maximum Weight:", Total_Weight, "/", Weight_Limit)
     if Total_Weight <= Weight_Limit:
         print("PASSED")
+        Test1 = True
     else:
         print("Failed")
     print("People in lift:", Total_People, "/", People_Limit)
     if Total_People <= People_Limit:
         print("PASSED\n")
+        Test2 = True
     else:
         print("Failed\n")
+
+    if Test1 and Test2:
+        safe = True
+    else:
+        safe = False
+    return safe
 
 
 # This will go to the next requested floor using the look algorithm
