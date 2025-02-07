@@ -1,0 +1,47 @@
+queue = []
+floor = 1
+
+There's a few situations that can happen:
+
+0. The lift has 0 requests,
+
+    This also needs to be considered.
+    In this case, the lift would be stationary. 
+
+    There are 4 options of where we rest the lift,
+
+        i. The lift stays where it's last request was
+
+        ii. It rests on the n/2 floor. That way it's the closest to both ends of the building. 
+        (If we do this we HAVE to assume that people wont primarily be getting in on the first floor)
+
+        iii. It simply goes back down to the first floor
+
+        iv. It goes to the most frequently visited floor, but I dont think this is the most practical method as we can't tell what that is
+             also it would be way to much hassle to implement. 
+
+
+1. The lift has 1 request, (2+ people pressing the same floor number would count as one request)
+    
+    If the request is > floor:
+    then the lift simply goes up
+    
+    If the request is < floor:
+    then the lift goes down.
+
+    If the request = floor:
+    then the lift just would let the people in and drop them off straight away
+
+2. The lift has 2+ requests, 
+
+    If the distance between floor and request1 > distance between floor and request2
+    then the lift goes to request1
+
+    If request1 < floor; and the distance between floor and request1 > distance between floor and request2
+    then the floor goes to request1 and then to request 2
+    (request1 is just a variable so theres no need to repeat this for request2, they're interchangeable. This is the ONLY scenario)
+
+
+This is the point at which it gets complicated. What happens if the first request has been completed but another person comes into the lift?
+Does the lift still go to the floor that is closer? Or does it implement a queue system? Will need to use priority queues and heaps.
+
