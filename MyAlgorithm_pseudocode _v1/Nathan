@@ -1,0 +1,37 @@
+0. The lift is idle (No requests in queue)
+When the lift has no requests, it always moves to floor n/2 and waits there.
+•This minimizes the average response time for future requests.
+•The lift remains stationary at n/2 until a request arrives.
+
+1. The lift has one request
+•The lift moves directly to the requested floor, then stops and opens the doors.
+•Once the request is completed, it checks if more requests have appeared:
+•If new requests exist, it picks a direction and continues.
+•If no new requests exist, it returns to floor n/2 and idles.
+
+2. The lift has multiple requests
+•The lift serves all requests in the current direction before changing directions.
+•Requests are prioritized based on distance and waiting time:
+•If moving up, serve the closest higher floors first.
+•If moving down, serve the closest lower floors first.
+•When no more requests exist in the current direction, the lift reverses direction if needed.
+
+
+3. Special Cases
+3.1 Two passengers at the same floor want to go in opposite directions
+  •The lift only picks up passengers moving in its current direction.
+  •The other request is added to the queue for later.
+  •If the lift is idle it picks up both passengers and goes to the closest floor first.
+
+3.2 A new request appears while moving
+  •If it aligns with the current direction, it is inserted into the queue.
+  •If it requires a direction change, it is handled after the current trip, unless:
+	  •The request has waited too long, in which case the lift adjusts its route.
+
+3.3 Long wait times:
+  •If a request is ignored for too long, the lift will prioritize it to prevent starvation.
+
+
+4. Implementation Considerations
+  •Queues & Heaps: Used to efficiently manage and prioritize requests.
+  •Handling Long Wait Times: If a request waits too long, the lift prioritizes it.
