@@ -36,7 +36,7 @@ FUNCTION INIT_HEAP ():
 
 
 FUNCTION INSERT (dictionary):
-    ADD (new dictionary item) to queue   (This is obviously to the end of the queue)
+    ADD (new dictionary item) to heap   (This is obviously to the end of the queue)
     HEAPIFY_UP (heap, Last_Index)        (to maintain heap order)
 
 
