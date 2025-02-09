@@ -45,3 +45,8 @@ There's a few situations that can happen:
 This is the point at which it gets complicated. What happens if the first request has been completed but another person comes into the lift?
 Does the lift still go to the floor that is closer? Or does it implement a queue system? Will need to use priority queues and heaps.
 
+min heaps O(logn)
+Turns out all of this can be done with min heaps and there's no need to even consider 1 request at a time.
+
+FIFO priority queue
+Heap queue library can be used but this probably counts as cheating??

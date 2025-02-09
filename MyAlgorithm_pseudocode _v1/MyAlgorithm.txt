@@ -1,0 +1,70 @@
+dictionary = {}
+heap = []           This should be done inside of a function
+
+FUNCTION HEAPIFY_UP (heap, index)       ( Restores the order after insert )
+    While index > 0:
+        parent = (index - 1) / 2
+        if heap[parent] > heap[index]:
+            SWAP heap[parent] and heap[index]
+            index = parent
+        else:
+            break
+
+
+FUNCTION HEAPIFY_DOWN (heap, index)     ( Restores order after removal )
+    WHILE index has children:
+        smallest = index
+        L_child = 2 * (index + 1)
+        R_child = 2 * (index + 2)
+
+        if L_child exists AND heap[L_child] < heap[smallest]:
+            smallest = L_child
+
+        if R_child exists AND heap[R_child] < heap[smallest]:
+            smallest = R_child
+
+        if smallest != index:
+            SWAP heap[index] and heap[smallest]
+            index = smallest
+
+        else:
+            break
+
+
+FUNCTION INIT_HEAP ():
+    return heap []
+
+
+FUNCTION INSERT (dictionary):
+    ADD (new dictionary item) to queue   (This is obviously to the end of the queue)
+    HEAPIFY_UP (heap, Last_Index)        (to maintain heap order)
+
+
+FUNCTION REMOVE (heap):
+    if heap is empty:
+        return none 
+    
+    top_value = heap[0]                 (Let top_value = x)
+    SWAP heap[0] and heap[last_element]        (moves x to the back of the list)
+    REMOVE last_element                 ( removes x )
+
+    HEAPIFY_DOWN (heap, 0)
+    return top_value
+
+
+FUNCTION PEEK (heap)                    ( get the top element without removing it )
+    if heap is empty:
+        return none
+    
+    return heap[0]
+
+
+FUNCTION IS_EMPTY (heap):
+    return heap size == 0
+
+
+FUNCTION BUILD_HEAP ('heap'):                           ( Converts an unordered array into a valid heap by applying heap down a bunch)
+    for i in range(size of 'heap' / 2, -1, 0):               ( NOTE: heap is just the name of the array, it doesnt actually need to be a sorted heap yet.)
+        HEAPIFY_DOWN('heap', i)
+    return heap
+
