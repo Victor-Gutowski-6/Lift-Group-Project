@@ -3,8 +3,7 @@
     "TechnicalComponents":
     {
         "NumberOfFloors" : 10,
-        "People_Limit" : 10,
-        "Weight_Limit" : 1500
+        "People_Limit" : 10
         
     },
     

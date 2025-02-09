@@ -1,5 +1,15 @@
 import json
-from main import elevator
+
+def printfloors():
+    with open('info.json', 'r') as file:
+        data = json.load(file)
+
+    total_floors = data["TechnicalComponents"]["NumberOfFloors"]
+
+    print("\n")
+    for f in range(1,total_floors+1):
+        print(f)
+    print("\n")
 
 # This will go to the next requested floor using the look algorithm
 def look(floor,queue):
@@ -43,7 +53,7 @@ def SafetyChecks(total_people):
         data = json.load(file)
     
     People_Limit = data["TechnicalComponents"]["People_Limit"]
-    Total_People = elevator
+    Total_People = total_people
 
 
     print("Maximum amount of 10 people allowed at one time\n")
