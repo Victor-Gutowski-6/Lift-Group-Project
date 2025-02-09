@@ -83,7 +83,7 @@ def init_heap():
 
 def heapify_up(heap,index):
     while index > 0:
-        parent = (index - 1) / 2
+        parent = (index - 1) / 2                # this may be //  ???
         if heap [parent] > heap [index:]:
 
             x = heap[parent]
@@ -122,7 +122,7 @@ def heapify_down(heap,index):
 # the priortiy will be input looking something like dictionary[value[i]]
 def insert(heap,priority_level): # The priority will be a dictionary key; the floor will be the value 
     heap.append(priority_level)
-    heapify_up(heap, heap[-1])
+    heapify_up(heap, heap[-1])  #There may be some issues with calling the function, look into this if any errors occur 
 
 
 def is_empty(heap):
@@ -130,7 +130,7 @@ def is_empty(heap):
 
 
 def remove(heap):
-    if is_empty():
+    if heap.is_empty():
         return None
 
     top_value = heap[0]
@@ -145,7 +145,7 @@ def remove(heap):
 
 
 def peek(heap):
-    if is_empty():
+    if heap.is_empty():
         return None
     
     return heap[0]
