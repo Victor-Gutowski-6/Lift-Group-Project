@@ -36,50 +36,28 @@ def scan(floor,queue):
     return floor
 
 
-# These just makes sure everything is good before the lift moves
-def total_weight (elevator): # evevator will be a dictionary of the people currently in the eleveator
-    weight = sum(elevator.values())
-    return weight
-
-
-def total_people(elevator):
-    people = len(elevator)
-    return people
-
-
-def SafetyChecks():
+# This just makes sure everything is good before the lift moves
+def SafetyChecks(total_people):
     # Opens json file 
     with open('info.json', 'r') as file:
         data = json.load(file)
     
-    Weight_Limit = data["TechnicalComponents"]["Weight_Limit"]
     People_Limit = data["TechnicalComponents"]["People_Limit"]
-    Total_Weight = total_weight(elevator)
-    Total_People = total_people(elevator)
+    Total_People = elevator
 
 
-    print("⦿The maximum weight limit is 1500kg")
-    print("⦿Maximum amount of 10 people allowed at one time\n")
+    print("Maximum amount of 10 people allowed at one time\n")
 
     print("TESTING:")
-    print("Maximum Weight:", Total_Weight, "/", Weight_Limit)
-    if Total_Weight <= Weight_Limit:
-        print("PASSED")
-        Test1 = True
-    else:
-        print("Failed")
     print("People in lift:", Total_People, "/", People_Limit)
     if Total_People <= People_Limit:
         print("PASSED\n")
-        Test2 = True
+        return True
     else:
         print("Failed\n")
+        return False
 
-    if Test1 and Test2:
-        safe = True
-    else:
-        safe = False
-    return safe
+    
 
 
 def AskDirection():
