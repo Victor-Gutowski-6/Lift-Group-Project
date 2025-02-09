@@ -1,16 +1,20 @@
 import time
 from algorithms import (
-    SafetyChecks,
-    scan,
     look,
+    scan,
+    SafetyChecks,
     AskDirection,
-    MyAlgorithm
+    init_heap,
+    insert,
+    remove,
+    peek,
+    build_heap
 )
 
-'''
-The floors start from floor 1 and go to floor 10. There is no Ground floor.
-'''
 
-queue = []
+#The floors start from floor 1 and go to floor 10. There is no Ground floor.
+
+
+heap = []
 floor = 1
-
+elevator = {}

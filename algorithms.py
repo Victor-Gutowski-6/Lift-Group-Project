@@ -1,4 +1,5 @@
 import json
+from main import elevator
 
 # This will go to the next requested floor using the look algorithm
 def look(floor,queue):
@@ -35,7 +36,17 @@ def scan(floor,queue):
     return floor
 
 
-# This just makes sure everything is good before the lift moves
+# These just makes sure everything is good before the lift moves
+def total_weight (elevator): # evevator will be a dictionary of the people currently in the eleveator
+    weight = sum(elevator.values())
+    return weight
+
+
+def total_people(elevator):
+    people = len(elevator)
+    return people
+
+
 def SafetyChecks():
     # Opens json file 
     with open('info.json', 'r') as file:
@@ -43,8 +54,8 @@ def SafetyChecks():
     
     Weight_Limit = data["TechnicalComponents"]["Weight_Limit"]
     People_Limit = data["TechnicalComponents"]["People_Limit"]
-    Total_Weight = 1000 # Create a function that calculates the weight of the people CURRENTLY in the elevator
-    Total_People = 8 # Create a function that calculates how many people are in the elevator
+    Total_Weight = total_weight(elevator)
+    Total_People = total_people(elevator)
 
 
     print("⦿The maximum weight limit is 1500kg")
@@ -83,8 +94,8 @@ def init_heap():
 
 def heapify_up(heap,index):
     while index > 0:
-        parent = (index - 1) / 2                # this may be //  ???
-        if heap [parent] > heap [index:]:
+        parent = (index - 1) // 2
+        if heap [parent] > heap [index]:
 
             x = heap[parent]
             heap[parent] = heap[index]
@@ -120,7 +131,7 @@ def heapify_down(heap,index):
             break
 
 # the priortiy will be input looking something like dictionary[value[i]]
-def insert(heap,priority_level): # The priority will be a dictionary key; the floor will be the value 
+def insert(heap,priority_level): # The priority will be a dictionary value; the floor will be the key
     heap.append(priority_level)
     heapify_up(heap, heap[-1])  #There may be some issues with calling the function, look into this if any errors occur 
 
@@ -130,7 +141,7 @@ def is_empty(heap):
 
 
 def remove(heap):
-    if heap.is_empty():
+    if is_empty(heap):
         return None
 
     top_value = heap[0]
@@ -145,13 +156,13 @@ def remove(heap):
 
 
 def peek(heap):
-    if heap.is_empty():
+    if is_empty(heap):
         return None
     
     return heap[0]
 
 
 def build_heap(heap): # Note: this isnt a heap yet, just an unsorted array
-    for i in range(len(heap)/2 ,-1,0):
+    for i in range(len(heap)//2 ,-1,0): # 0 could be -1?
         heapify_down(heap,i)
     return heap
