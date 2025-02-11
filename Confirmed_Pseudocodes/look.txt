@@ -1,13 +1,13 @@
 function look (floor, queue)
-while queue[0] != floor AND queue.length != 0
-	if floor >= 10 OR queue[-1] < floor
-		floor -=1
-		continue
-	elif floor <= 1 or queue[0] > floor
-		floor += 1
-		continue
+	while queue[0] != floor AND queue.length != 0
+		if floor >= 10 OR queue[-1] < floor
+			floor -=1
+			continue
+		elif floor <= 1 or queue[0] > floor
+			floor += 1
+			continue
 		endif
 	end while
-print(“lift stopping at floor: “ + floor)
-return floor
+	print(“lift stopping at floor: “ + floor)
+	return floor
 end function
