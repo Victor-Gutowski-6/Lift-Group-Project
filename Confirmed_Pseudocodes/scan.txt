@@ -1,11 +1,14 @@
 function scan (floor, queue)
-  while queue[0] != floor AND queue.length != 0
-	  if floor >= 10
-		  floor -=1
-	  else
-		  floor += 1
+	while queue[0] != floor AND queue.length != 0
+		if floor >= 10
+			floor -=1
+			continue
+		else
+			floor += 1
+			continue
 		endif
-  end while
-  print(“lift stopping at floor: “ + floor)
-  return floor
+	end while
+	print(“lift stopping at floor: “ + floor)
+	return floor
 end function
+
