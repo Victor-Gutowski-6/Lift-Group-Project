@@ -47,7 +47,7 @@ def My_Algorithm(heap,people): # the F is just to make it easier to tell which t
     people = people + 1 #NEED TO REMEMBER TO RETURN GLOBAL PEOPLE COUNT AT THE END 
 
     if any(sub[1] == exit for sub in heap):
-        repeats = []
+        repeats = [] # is it possible to add a third like variable? in the heap to log number of requests per floor?
     else:
         insert(heap,0,exit) # [priority,exit floor]
     print(heap)
@@ -72,6 +72,7 @@ def My_Algorithm_exits(heap,floor,people): #floor is just the current floor the 
 
         moving(floor,heap)
         people -= 1 # Need to handle multiple people leaving the lift
+        # people -= third variable? in heap, if that is possible
         print(f"{people} remaining in the lift.")
     
     return heap,floor,people
