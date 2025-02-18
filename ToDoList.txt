@@ -1,0 +1,3 @@
+Fix the scan and look functions
+Create a system for people to be able to call from floors
+Make it so multiple can leave the lift at 1 time
