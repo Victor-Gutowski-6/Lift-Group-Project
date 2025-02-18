@@ -120,8 +120,8 @@ def heapify_down(heap,index):
             break
 
 # the priortiy will be input looking something like dictionary[value[i]]
-def insert(heap,priority_level,floor): # The priority will be a dictionary value; the floor will be the key
-    heap.append([priority_level,floor])
+def insert(heap,priority_level,floor, num_requests): # The priority will be a dictionary value; the floor will be the key
+    heap.append([priority_level,floor, num_requests]) #need to check if adding num_requests here requires changes in any of the other heap algorithms
     heapify_up(heap, len(heap)-1)  #There may be some issues with calling the function, look into this if any errors occur     # Fix indexing issue
  
 
