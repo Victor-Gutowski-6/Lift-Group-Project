@@ -49,6 +49,7 @@ def My_Algorithm(heap,people): # the F is just to make it easier to tell which t
     if any(sub[1] == exit for sub in heap):
         repeats = [] 
         # is it possible to add a third like variable? in the heap to log number of requests per floor?
+        # may have done that? but now need to figure out how to access and increment it here
     else:
         insert(heap,0,exit, 1) # [priority,exit floor]
     print(heap)
