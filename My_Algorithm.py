@@ -61,19 +61,19 @@ def My_Algorithm(heap,people): # the F is just to make it easier to tell which t
 heap, people = My_Algorithm(heap,people)
 
 
-
-
-
-
 # This will control which floor the lift is on, people exiting, and the amoint of people in the lift
 def My_Algorithm_exits(heap,floor,people): #floor is just the current floor the lift is on.
     while heap:
         heap = build_heap(heap)
+        if not heap:
+            break
         next_floor = remove(heap)
-        floor = next_floor
+        floor = next_floor[1]
 
         moving(floor,heap)
         people -= 1 # Need to handle multiple people leaving the lift
         print(f"{people} remaining in the lift.")
     
     return heap,floor,people
+
+heap,floor,people = My_Algorithm_exits(heap,floor,people)

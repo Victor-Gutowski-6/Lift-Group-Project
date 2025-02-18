@@ -1,3 +1,10 @@
-Fix the scan and look functions
-Create a system for people to be able to call from floors
+The moving function needs fixing
 Make it so multiple can leave the lift at 1 time
+Create a system for people to be able to call from floors (this will be in the main function)
+Fix the scan and look functions
+
+Write the main algorithm for My_Algorithm.
+    - Calling the elevator
+    - entering the elevator
+    - some way to determine when people want to enter/leave
+    - leaving the elevator
