@@ -1,0 +1,154 @@
+import json
+import time
+
+Class MYLIFT:
+
+    // This just initialises the variables we will be using
+    FUNCTION __init__(self,start_floor=0)
+        self.heap = []
+        self.current_floor = start_floor
+        self.direction = "up"   // Can also be down
+        self.FIFO_tracker = 0   // Tracks which request went in first, the higher the number the more priority
+
+
+    FUNCTION calculate_priority(self,floor)
+        IF (self.direction = "up" and floor >= self.current_floor) or (self.direction == "down" and floor <= self.current_floor)
+            direction_priority = 0
+        ELSE:
+            direction_priority = 1 
+        
+        distance = |floor - self.current_floor|
+        RETURN direction_priority * 1000 + distance     // Multiplied by 1000 to make sure it finishes requests in one direction before moving onto the other
+    
+    
+    FUNCTION heapify_up(self,index)
+        WHILE index > 0:
+            parent = (index - 1) // 2
+            IF self.heap[index] < self.heap[parent]:
+                placeholder = self.heap[parent]
+                self.heap[parent] = self.heap[index]
+                self.heap[index] = placeholder
+
+                index = parent
+            ELSE:
+                break
+
+    
+    FUNCTION heapify_down(self,index)
+        size = len(self.heap)
+        WHILE TRUE:
+            smallest = index
+            L_child = 2 * index + 1
+            R_child = 2 * index + 2
+
+            IF (L_child < size) and (self.heap[L_child] < self.heap[smallest]):
+                smallest = L_child
+
+            IF (R_child < size) and (self.heap[R_child] < self.heap[smallest]):
+                smallest = R_child
+            
+            IF smallest != index:
+                placeholder = self.heap[smallest]
+                self.heap[smallest] = self.heap[index]
+                self.heap[index] = placeholder
+
+                index = smallest
+
+            ELSE:
+                break   
+    
+    
+    FUNCTION add_request(self,floor,people_in_lift)
+        IF not Safety_checks(people_in_lift):
+            print(f"Request for floor {floor} denied: Over capacity!\n")
+            return none  
+        
+        self.FIFO_tracker += 1
+        priority = self.calculate_priority(floor)
+        self.heap.append((priority, self.FIFO_tracker, floor))      // The request will be stored as a tupple
+        self.sift_up(len(self.heap) - 1)    // The added element will be at the length of the list -1 (at the end of the list)
+        print(f"Request successfully added for floor {floor}.\n")
+
+
+    FUNCTION get_next_floor(self)
+        IF NOT self.heap:
+            return number of floors // 2     // Send the lift into the middle so it can respond to its next request the fastest
+
+        //  Swaps the first and last element in the heap
+        placeholder = self.heap[0]
+        self.heap[0] = self.heap[-1]
+        self.heap[-1] = placeholder
+
+        next_floor = self.heap.pop()    // Removes the last element
+
+        IF self.heap:   // Restores the heap property if it's not empyty
+            self.heapify_down(0)
+
+        RETURN next_floor[-1] IF isinstance(next_floor, tupple) ELSE next_floor
+        //  This checks if the the next_floor is a tupple or a single value, it will be a tupple if the FIFO_tracker is being used.
+
+    
+    FUNCTION direction_checker_for_lift(self):
+        IF self.direction == "up":
+            RETURN any(floor > self.current_floor for _,_, floor in self.heap)
+        ELSE self.direction == "down":
+            RETURN any(floor < self.current_floor for _,_, floor in self.heap)
+
+    
+    FUNCTION is_empty(self):
+        RETURN len(self.heap) == 0
+
+
+
+
+
+Class GENERAL:  // This will be used for every algorithm so we dont care about its time complexity
+
+    FUNCTION print_floors()
+        with open('info.json', 'r') as file:
+        data = json.load(file)
+
+        total_floors = data["TechnicalComponents"]["NumberOfFloors"]
+        print("\n")
+        FOR f in range(1, total_floors + 1):
+            print(f)
+        print("\n") 
+
+    
+    FUNCTION Safety_checks(people_in_lift)
+        with open('info.json', 'r') as file:
+        data = json.load(file)
+
+        people_limit = data["TechnicalComponents"]["People_Limit"]
+
+        print("Maximum amount of 10 people allowed at one time\n")
+        print("TESTING:")
+        print("People in lift:", people_in_lift, "/", people_limit)
+        IF people_in_lift <= people_limit:
+            print("PASSED\n")
+            return True
+        ELSE:
+            print("Failed\n")
+            return False
+
+    
+    FUNCTION moving(current_floor, target_floor, delay=3)
+        step = 1 IF target_floor > current_floor ELSE -1    // This is just so it doesn't repeat the floor its already on and enforces the direction its going in
+        FOR floor in range(current_floor + step, target_floor + step, step):
+            time.sleep(delay)
+            print(f"The lift is now on floor: {floor}")
+
+
+
+
+
+Class GIVEN_ALGORITHMS:
+    // This will be added later
+
+
+
+
+
+THIS WILL BE IN THE MAIN FILE!!!
+
+Imports from the other files

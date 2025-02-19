@@ -1,0 +1,3 @@
+Lift need to be able to be called from a random floor.
+Account for more than 1 person coming into the lift
+    Keep track of how many people go into the lift with every stop
