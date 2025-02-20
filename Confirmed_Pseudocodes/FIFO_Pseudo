@@ -1,0 +1,30 @@
+CLASS FIFO_LIFT:
+    
+    FUNCTION INITIALISE(start_floor = 0):
+        SET queue TO empty list  // FIFO queue to store requests
+        SET current_floor TO start_floor
+        SET direction TO "up"  // Default direction
+
+    FUNCTION ADD_REQUEST(floor, people_in_lift):
+        IF NOT SAFETY_CHECKS(people_in_lift) THEN
+            PRINT "Request denied: Over capacity!"
+            RETURN
+
+        APPEND floor TO queue
+        PRINT "Request added for floor " + floor
+
+    FUNCTION GET_NEXT_FLOOR():
+        IF queue IS EMPTY THEN
+            RETURN TOTAL_FLOORS // 2  // Move to middle floor when idle
+
+        RETURN REMOVE FIRST ELEMENT FROM queue
+
+    FUNCTION PROCESS_REQUESTS():
+        WHILE queue IS NOT EMPTY:
+            SET next_floor TO GET_NEXT_FLOOR()
+            CALL MOVING(current_floor, next_floor)
+            SET current_floor TO next_floor
+            PRINT "Arrived at floor " + next_floor
+
+    FUNCTION IS_EMPTY():
+        RETURN TRUE IF LENGTH(queue) == 0 ELSE FALSE
