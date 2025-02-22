@@ -58,11 +58,15 @@ Class MYLIFT:
                 break   
     
     
-    FUNCTION add_request(self,floor,people_in_lift)
+    FUNCTION add_request(self,floor, // people_in_lift)     // The people_in_lift parameter is unaccasary if we're not checking safety
+        
+        // Safety checks may already be done in the requests function
+        '''
         IF not Safety_checks(people_in_lift):
             print(f"Request for floor {floor} denied: Over capacity!\n")
             return none  
-        
+        '''
+
         self.FIFO_tracker += 1
         priority = self.calculate_priority(floor)
         self.heap.append((priority, self.FIFO_tracker, floor))      // The request will be stored as a tupple
@@ -138,11 +142,91 @@ Class GENERAL:  // This will be used for every algorithm so we dont care about i
             time.sleep(delay)
             print(f"The lift is now on floor: {floor}")
 
+    
+    FUNCTION requests(lift, people_in_lift)     // REMEMBER TO CREATE A lift INSTANCE IN THE MAIN FUNCTION!!!
+        
+        with open('info.json', 'r') as file:
+        data = json.load(file)
+
+        total_floors = data["TechnicalComponents"]["NumberOfFloors"]
+        people_limit = data["TechnicalComponents"]["People_Limit"]
+
+        TRY:
+            Internal_GettingOn = input("Are there people getting on, on this floor?: ")
+            IF Internal_GettingOn.lower() == 'yes':
+                Internal_People = int(input("How many people are getting on?: "))
+                total_people = people_in_lift + Internal_People
+
+                // Safety Checks
+                IF NOT Safety_checks(total_people):
+                    print("Doors reopening - Too many people!\n")
+                    
+                FOR i in range(1,Internal_People+1):  
+                    while True:
+                        TRY:
+                            Internal_Floor = int(input(f"Which floor is person {i} going to?: "))
+                            IF Internal_Floor < 0 OR Internal_Floor > total_floors:
+                                print(f"Floor must be non negative and below floor {total_floors}" )
+                                CONTINUE
+                            lift.add_request(Internal_Floor)
+                            BREAK
+                        EXCEPT ValueError:
+                            print("Invalid floor number. Please enter and integer.\n")
+
+                people_in_lift = total_people       
+                print(f"{Internal_People} people got on. Total people now: {total_people}\n")
+
+            ELSE:
+                print("No people boarding on this floor.\n")
+
+        EXCEPT ValueError:
+            print("Invalid input. Please enter number values where required.")
+
+        
+        TRY:
+            IF people_in_lift <= people_limit:   // Making sure theres even space for extra requests
+                External_GettingOn = input("Are there people requesting the lift from other floors?: )
+                IF External_GettingOn == 'yes':
+                    External_People = int(input("How many floors have people waiting?: "))
+                    For f in range(1,External_People+1):
+                        IF people_in_lift >= people_limit:  // Does as many floors as possible
+                            print("Lift is at full capacity. Remaining requests cannot be processed.\n"  )
+                            BREAK
+
+                        pickup_floor = int(input(f"\nFloor {f}: Which floor are people waiting on?: " ))
+                        people_at_floor = int(input(f"How many people are getting on at floor {pickup_floor}?: " ))
+
+                        For p in range(1, people_at_floor+1):
+                            IF people_in_lift < people_limit:
+                                destination_floor = int(input(f"Person {p} from floor {pickup_floor}, want to go to floor?: "))
+                                people_in_lift += 1
+                                lift.add_request(pickup_floor)
+                                lift.add_request(destination_floor)
+                            ELSE:
+                                print("Lift reached full capacity. Remaining reqests skipped.\n")
+                                BREAK
+                        
+                        ELSE:
+                            print("No external requests added.\n")
+
+                ELSE:
+                    print("Lift is already at full capacity.\n")
+        
+        EXCEPT ValueError:
+            print("Invalid input. Please enter number values where required.")
+
+        RETURN people_in_lift
+
+
+            
+            
 
 
 
 
-Class GIVEN_ALGORITHMS:
+
+
+Class LIFT_ALGORITHMS:
     // This will be added later
 
 
