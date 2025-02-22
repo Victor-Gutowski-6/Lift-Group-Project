@@ -218,16 +218,37 @@ Class GENERAL:  // This will be used for every algorithm so we dont care about i
         RETURN people_in_lift
 
 
-            
-            
-
-
-
-
+    
 
 
 Class LIFT_ALGORITHMS:
-    // This will be added later
+    
+    FUNCTION __init__(self)
+        self.people_in_lift = 0
+    
+    
+    FUNCTION MYLIFT_main()
+        
+        // Creating instances
+        general = GENERAL()
+        lift = MYLIFT()
+
+
+        WHILE True:
+            self.people_in_lift = general.requests(lift,self.people_in_lift)
+            IF lift.is_empty():
+                print("No requests.")
+            
+            WHILE NOT lif.is_empty():
+                next_floor = lift.get_next_floor()
+                general.moving(lift.current_floor, next_floor)
+                lift.current_floor = next_floor
+                print(f"Lift has arrived at floor {next_floor}.\n")
+
+                self.people_in_lift = general.requests(lift, self.people_in_lift)
+
+                if list.is_empty():
+                    BREAK
 
 
 
