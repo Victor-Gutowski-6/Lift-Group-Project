@@ -70,7 +70,7 @@ Class MYLIFT:
         self.FIFO_tracker += 1
         priority = self.calculate_priority(floor)
         self.heap.append((priority, self.FIFO_tracker, floor))      // The request will be stored as a tupple
-        self.sift_up(len(self.heap) - 1)    // The added element will be at the length of the list -1 (at the end of the list)
+        self.heapify_up(len(self.heap) - 1)    // The added element will be at the length of the list -1 (at the end of the list)
         print(f"Request successfully added for floor {floor}.\n")
 
 
@@ -247,7 +247,7 @@ Class LIFT_ALGORITHMS:
 
                 self.people_in_lift = general.requests(lift, self.people_in_lift)
 
-                if list.is_empty():
+                if lift.is_empty():
                     BREAK
 
 
