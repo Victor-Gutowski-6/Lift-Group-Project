@@ -143,6 +143,7 @@ Class GENERAL:  // This will be used for every algorithm so we dont care about i
             print(f"The lift is now on floor: {floor}")
 
     
+    // I've accidentally made this into a function using the heap; cant be used for the other algorithms
     FUNCTION requests(lift, people_in_lift)     // REMEMBER TO CREATE A lift INSTANCE IN THE MAIN FUNCTION!!!
         
         with open('info.json', 'r') as file:
@@ -217,6 +218,10 @@ Class GENERAL:  // This will be used for every algorithm so we dont care about i
 
         RETURN people_in_lift
 
+    
+    FUNCTION  FIFO_requests(people_in_lift)
+
+
 
     
 
@@ -252,6 +257,8 @@ Class LIFT_ALGORITHMS:
     
 
     FUNCTION MYLIFT2_main()
-        
 
+    // Creating instances
+        general = GENERAL()
+        lift = MYLIFT()
 

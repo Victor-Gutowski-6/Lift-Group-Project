@@ -7,10 +7,12 @@ class MYLIFT:
     # Initalising the variables
     def __init__(self, start_floor=0):
         self.heap = []
-        self.current_floor = start_floor
-        self.direction = "up"
-        self.FIFO_tracker = 0
+        self.current_floor = start_floor    # This is both for MYLIFT1 & MYLIFT2
+        self.direction = "up"               # This is both for MYLIFT1 & MYLIFT2
+        self.FIFO_tracker = 0   # This is actually for the heap algorithm
         self.passenger_hashmap = {}
+
+        self.queue = []
 
     
     def add_passenger(self,floor):
@@ -114,7 +116,32 @@ class MYLIFT:
     def is_empty(self):
         return len(self.heap) == 0
 
+    # THE NEXT FEW FUNCTIONS ARE FOR THE MYLIFT2 ALGORITHM! #
 
+    def FIFO_add_request(self,floor, people_in_lift):
+        if not General.safety_checks(people_in_lift):
+            print("Request denied: Over capacity!")
+            return None
+        
+        self.queue.append(floor)
+        print(f"Request added for floor {floor}")
+
+
+    def FIFO_is_empty(self):
+        return True if len(self.queue) == 0 else False
+    
+    
+    def FIFO_get_next_floor(self):
+        with open('info.json', 'r') as file:
+            data = json.load(file)    
+        total_floors = data["TechnicalComponents"]["NumberOfFloors"]
+        
+        if self.queue != []:
+            return total_floors // 2
+        
+        return self.queue.pop(0)
+
+        
 
 
 
@@ -239,6 +266,12 @@ class General:  # This will be used in every algorithm so we dont care about its
             print("Invalid input. Please enter number values where required.")
 
         return people_in_lift
+    
+
+    # This is now the request function for the FIFO algortihm
+    @ staticmethod
+    def FIFO_requests():
+        print("")
 
 
 
