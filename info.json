@@ -1,24 +1,8 @@
 {
-
     "TechnicalComponents":
     {
-        "NumberOfFloors" : 10,
-        "People_Limit" : 10
+        "NumberOfFloors" : 5,
+        "People_Limit" : 4
         
-    },
-    
-    "PeopleWeights":
-    {
-        "Person_1" : 80,
-        "Person_2" : 80,
-        "Person_3" : 80,
-        "Person_4" : 80,
-        "Person_5" : 80,
-        "Person_6" : 80,
-        "Person_7" : 80,
-        "Person_8" : 80,
-        "Person_9" : 80,
-        "Person_10" : 80
     }
-
 }

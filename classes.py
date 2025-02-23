@@ -10,6 +10,21 @@ class MYLIFT:
         self.current_floor = start_floor
         self.direction = "up"
         self.FIFO_tracker = 0
+        self.passenger_hashmap = {}
+
+    
+    def add_passenger(self,floor):
+        if floor in self.passenger_hashmap:
+            self.passenger_hashmap[floor] += 1  # Add 1 to people exiting on that floor, if floor already exists
+        else:
+            self.passenger_hashmap[floor] = 1   # If floor doesnt already exist then make the floor exist
+
+    
+    def remove_passengers(self):
+        exiting_passangers = self.passenger_hashmap.pop(self.current_floor, 0)
+        if exiting_passangers > 0:
+            print(f"{exiting_passangers} passenger(s) got off at floor {self.current_floor}.\n")
+        return exiting_passangers
 
 
     def calculate_priority(self,floor):
@@ -147,7 +162,10 @@ class General:  # This will be used in every algorithm so we dont care about its
         people_limit = data["TechnicalComponents"]["People_Limit"]
 
         try:
-            Internal_GettingOn = input("Are there people getting on, on this floor?: ")
+            Internal_GettingOn = '0'
+            while Internal_GettingOn.lower() != 'yes' and Internal_GettingOn.lower() != 'no':
+                Internal_GettingOn = input("Are there people getting on, on this floor? ('yes' or 'no'): ")
+                continue
             if Internal_GettingOn.lower() == 'yes':
                 Internal_People = int(input("How many people are getting on?: "))
                 
@@ -166,6 +184,7 @@ class General:  # This will be used in every algorithm so we dont care about its
                                     print(f"Floor must be non negative and below floor {total_floors}" )
                                     continue
                                 lift.add_request(Internal_Floor)
+                                lift.add_passenger(Internal_Floor)
                                 break
                             except ValueError:
                                 print("Invalid floor number. Please enter an integer.\n")
@@ -183,26 +202,59 @@ class General:  # This will be used in every algorithm so we dont care about its
 
         try:
             if people_in_lift <= people_limit:  # Making sure there's even more space for more requests
-                External_GettingOn = input("Are there people requesting the lift from other floors?: ")
+                External_GettingOn = '0'
+                while External_GettingOn != 'yes' and External_GettingOn != 'no':
+                    External_GettingOn = input("Are there people requesting the lift from other floors? ('yes' or 'no'): ")
+                    continue
                 if External_GettingOn == 'yes':
-                    External_People = int(input("How many floors have people waiting?: "))
+                    while True:
+                        try:
+                            External_People = int(input("How many floors have people waiting?: "))
+                            break
+                        except ValueError:
+                            print("Invalid input. Please enter a number.\n")
+                    
                     for f in range(1,External_People+1):
                         if people_in_lift >= people_limit:
                             print("Lift is at full capacity. Remaining requests cannot be processed.\n"  )
                             break
 
-                        pickup_floor = int(input(f"\nFloor {f}: Which floor are people waiting on?: " ))
-                        people_at_floor = int(input(f"How many people are getting on at floor {pickup_floor}?: " ))
+                        while True:
+                            try:
+                                pickup_floor = int(input(f"\nFloor {f}: Which floor are people waiting on?: " ))
+                                if pickup_floor < 0 or pickup_floor > total_floors:
+                                    print(f"Floor must be non-negative and below floor {total_floors}. Please try again.\n")
+                                    continue
+                                break
+                            except ValueError:
+                                print("Invalid floor number. Please enter an integer.\n")
+
+                        while True:
+                            try:
+                                people_at_floor = int(input(f"How many people are getting on at floor {pickup_floor}?: " ))
+                                break
+                            except ValueError:
+                                print("Invalid input. Please enter a number.\n")
 
                         for p in range(1,people_at_floor+1):
                             if people_in_lift < people_limit:
-                                destination_floor = int(input(f"Person {p} from floor {pickup_floor}, want to go to floor?: "))
-                                people_in_lift += 1
-                                lift.add_request(pickup_floor)
-                                lift.add_request(destination_floor)
+                                while True:
+                                    try:
+                                        destination_floor = int(input(f"Person {p} from floor {pickup_floor}, want to go to floor?: "))
+                                        if destination_floor < 0 or destination_floor > total_floors:
+                                            print(f"Destination floor must be between 0 and {total_floors}. Please try again.\n")
+                                            continue
+                                        people_in_lift += 1
+                                        lift.add_request(pickup_floor)
+                                        lift.add_request(destination_floor)
+                                        lift.add_passenger(destination_floor)
+                                        break
+                                    except ValueError:
+                                        print("Invalid floor number. Please enter an integer.\n")
                             else:
                                 print("Lift reached full capacity. Remaining reqests skipped.\n")
                                 break
+                        
                         '''
                         else:
                             print("No external requests added.\n")
@@ -242,6 +294,9 @@ class lift_algorithms:
                 general.moving(lift.current_floor, next_floor)
                 lift.current_floor = next_floor
                 print(f"Lift has arrived at floor {next_floor}.\n")
+
+                exiting = lift.remove_passengers()
+                self.people_in_lift -= exiting
 
                 self.people_in_lift = general.requests(lift, self.people_in_lift)
 
