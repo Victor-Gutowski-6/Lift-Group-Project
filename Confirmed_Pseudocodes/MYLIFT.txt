@@ -249,11 +249,9 @@ Class LIFT_ALGORITHMS:
 
                 if lift.is_empty():
                     BREAK
+    
+
+    FUNCTION MYLIFT2_main()
+        
 
 
-
-
-
-THIS WILL BE IN THE MAIN FILE!!!
-
-Imports from the other files

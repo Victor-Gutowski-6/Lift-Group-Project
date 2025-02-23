@@ -1,2 +1,0 @@
-The moving function seems to not work properly sometimes? I think its an issue with the external method??
-Passenger count after external

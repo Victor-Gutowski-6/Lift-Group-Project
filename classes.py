@@ -225,43 +225,15 @@ class General:  # This will be used in every algorithm so we dont care about its
                                 if pickup_floor < 0 or pickup_floor > total_floors:
                                     print(f"Floor must be non-negative and below floor {total_floors}. Please try again.\n")
                                     continue
+                                lift.add_request(pickup_floor)
+                                people_in_lift += 1
                                 break
                             except ValueError:
                                 print("Invalid floor number. Please enter an integer.\n")
 
-                        while True:
-                            try:
-                                people_at_floor = int(input(f"How many people are getting on at floor {pickup_floor}?: " ))
-                                break
-                            except ValueError:
-                                print("Invalid input. Please enter a number.\n")
-
-                        for p in range(1,people_at_floor+1):
-                            if people_in_lift < people_limit:
-                                while True:
-                                    try:
-                                        destination_floor = int(input(f"Person {p} from floor {pickup_floor}, want to go to floor?: "))
-                                        if destination_floor < 0 or destination_floor > total_floors:
-                                            print(f"Destination floor must be between 0 and {total_floors}. Please try again.\n")
-                                            continue
-                                        people_in_lift += 1
-                                        lift.add_request(pickup_floor)
-                                        lift.add_request(destination_floor)
-                                        lift.add_passenger(destination_floor)
-                                        break
-                                    except ValueError:
-                                        print("Invalid floor number. Please enter an integer.\n")
-                            else:
-                                print("Lift reached full capacity. Remaining reqests skipped.\n")
-                                break
-                        
-                        '''
-                        else:
-                            print("No external requests added.\n")
-                
-                else:
-                    print("Lift is already at full capacity.\n")        I think this was causing some weird printing issue
-                '''
+                            lift.add_request(pickup_floor)
+                            people_in_lift += 1
+                            break
 
         except ValueError:
             print("Invalid input. Please enter number values where required.")
