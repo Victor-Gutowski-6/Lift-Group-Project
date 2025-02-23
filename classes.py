@@ -1,6 +1,7 @@
 import json
 import time
 
+
 class MYLIFT:
     
     # Initalising the variables
@@ -8,7 +9,7 @@ class MYLIFT:
         self.heap = []
         self.current_floor = start_floor
         self.direction = "up"
-        self.FOFO_tracker = 0
+        self.FIFO_tracker = 0
 
 
     def calculate_priority(self,floor):
@@ -62,7 +63,7 @@ class MYLIFT:
     def add_request(self,floor):
         self.FIFO_tracker += 1  # Makes sure floors arent ignored for too long
         priority = self.calculate_priority(floor)
-        self.heap.append((priority, self.FOFO_tracker, floor))  # The request is stores as a tupple in that format
+        self.heap.append((priority, self.FIFO_tracker, floor))  # The request is stores as a tupple in that format
         self.heapify_up(len(self.heap) - 1)
         print(f"Request successfully added for floor {floor}.\n")
     
@@ -104,6 +105,7 @@ class MYLIFT:
 
 class General:  # This will be used in every algorithm so we dont care about its time complexity
 
+    @staticmethod
     def print_floors():
         with open('info.json', 'r') as file:
             data = json.load(file)
@@ -112,7 +114,7 @@ class General:  # This will be used in every algorithm so we dont care about its
         for f in range(1,total_floors+1):
             print(f,"\n")
     
-
+    @staticmethod
     def safety_checks(people_in_lift):
         with open('info.json', 'r') as file:
             data = json.load(file)
@@ -129,6 +131,7 @@ class General:  # This will be used in every algorithm so we dont care about its
             return False
         
     
+    @staticmethod
     def moving(current_floor, target_floor, delay=3):
         step = 1 if target_floor > current_floor else -1    # This is just so it doesn't repeat the floor its already on and enforces the direction its going in
         for floor in range(current_floor + step, target_floor + step, step):
@@ -136,9 +139,8 @@ class General:  # This will be used in every algorithm so we dont care about its
             print(f"The lift is now on floor: {floor}")
     
     
+    @staticmethod
     def requests(lift,people_in_lift):
-        from classes import safety_checks
-        from classes import add_request
         with open('info.json', 'r') as file:
             data = json.load(file)
         total_floors = data["TechnicalComponents"]["NumberOfFloors"]
@@ -150,7 +152,7 @@ class General:  # This will be used in every algorithm so we dont care about its
                 Internal_People = int(input("How many people are getting on?: "))
                 
                 while True:
-                    if not safety_checks(people_in_lift + Internal_People):
+                    if not General.safety_checks(people_in_lift + Internal_People):
                         print("Doors reopening - Too many people!\n")
                         break
                     else:
@@ -201,12 +203,13 @@ class General:  # This will be used in every algorithm so we dont care about its
                             else:
                                 print("Lift reached full capacity. Remaining reqests skipped.\n")
                                 break
-                        
+                        '''
                         else:
                             print("No external requests added.\n")
                 
                 else:
-                    print("Lift is already at full capacity.\n")
+                    print("Lift is already at full capacity.\n")        I think this was causing some weird printing issue
+                '''
 
         except ValueError:
             print("Invalid input. Please enter number values where required.")
@@ -218,7 +221,7 @@ class General:  # This will be used in every algorithm so we dont care about its
 
 
 class lift_algorithms:
-
+    
     def __init__(self):
         self.people_in_lift = 0
 
