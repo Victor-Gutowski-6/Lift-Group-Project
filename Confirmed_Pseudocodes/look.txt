@@ -11,3 +11,10 @@ function look (floor, queue)
 	print(“lift stopping at floor: “ + floor)
 	return floor
 end function
+
+Create a list of all the floors
+Iterate throught that list stopping at every index
+Take requests from every floor
+	Put those requests into a queue
+	When the lift gets to that floor remove that amount of people
+When no more requests exist from the floor above, switch direction.
