@@ -171,11 +171,11 @@ class General:  # This will be used in every algorithm so we dont care about its
         
     
     @staticmethod
-    def moving(current_floor, target_floor, delay=3):
+    def moving(current_floor, target_floor, delay=0):
         step = 1 if target_floor > current_floor else -1    # This is just so it doesn't repeat the floor its already on and enforces the direction its going in
         for floor in range(current_floor + step, target_floor + step, step):
             time.sleep(delay)
-            print(f"The lift is now on floor: {floor}")
+            print(f"\nThe lift is now on floor: {floor}")
     
     
     @staticmethod
@@ -367,6 +367,7 @@ class lift_algorithms:
         
         self.total_floors = data["TechnicalComponents"]["NumberOfFloors"]
         self.lift_queue = deque()
+        self.current_floor = 0
 
 
     def MYLIFT_main(self):
@@ -422,64 +423,69 @@ class lift_algorithms:
         
     # These next few functions are strictly for the Scan & Look algorithms
     
-    def process_requests(self):
-    # goes from first floor to last and then back down
+    def load_people(self,floor):
+        while True:
+            try:
+                num_people = int(input(f"How many people are entering at floor {floor}? "))
+                if num_people < 0:
+                    print("Please enter a positive floor.\n")
+                    continue
+                break
+            except ValueError:
+                print("Please enter a numerical value when prompted to.\n")
 
-        # Going up:
-        for floor in range(1, self.total_floors + 1):
-            self.process_floor(floor)
+        for i in range(num_people):
+            if not General.safety_checks(len(self.lift_queue) + 1):
+                print(f"Lift is at full capacity. Person {i+1} cannot enter.\n")
+                break
 
-        # Going down:
-        for floor in range(self.total_floors, 0, -1):
-            self.process_floor(floor)
-
-
-    def unload_passangers(self,floor):
+            while True:
+                try:
+                    destination = int(input(f"Which floor does person {i+1} want to go to?: "))
+                    if 1 <= destination <= self.total_floors and destination != floor:
+                        self.lift_queue.append(destination)
+                        print(f"\nPerson {i+1} added with destination floor {destination}.")
+                        break
+                    else:
+                        print(f"Invalid floor. Please enter a valid floor between 1 and {self.total_floors}, "
+                            f"different from {floor}.")
+                except ValueError:
+                    print("Please enter a numerical value for the floor.\n")
+    
+    def unload_people(self,floor):
         initial_count = len(self.lift_queue)
         self.lift_queue = deque(dest for dest in self.lift_queue if dest != floor)
         removed_count = initial_count - len(self.lift_queue)
 
         if removed_count > 0:
-            print(f"{removed_count} passenger(s) got off at floor {floor}.")
+            print(f"\n{removed_count} passengers got off at floor {floor}.\n")
         else:
-            print(f"No passengers getting off at floor {floor}.")
-
+            print(f"No passengers getting off at floor {floor}.\n")
+    
+    
     
     def process_floor(self,floor):
-
-        print(f"Lift has arrived at floor {floor}.")
-        self.unload_passangers(floor)
-
-        people_entering = int(input(f"How many people are entering at floor {floor}? "))
-        for i in range(people_entering):
-            while True:
-                destination = int(input(f"Which floor does person {i+1} want to go to?: "))
-                if 1 <= destination <= self.total_floors and destination != floor:
-                    self.lift_queue.append(destination)
-                    print(f"Person {i+1} added with destination floor {destination}.")
-                    break
-                else:
-                    print(f"Invalid floor. Please enter a floor between 1 and {self.total_floors}, different from {floor}.")
-
+        # Manages people enetering and leaving the lift at specific points
+        print(f"\nLift has arrived at floor {floor}.")
+        self.unload_people(floor)
+        self.load_people(floor)
         print(f"Current passengers' destinations: {list(self.lift_queue)}")
 
 
     def SCAN_main(self):
         direction = "up"
-        current_floor = 1
 
-        # Start SCAN algorithm (up then down)
         while True:
             if direction == "up":
-                for floor in range(current_floor, self.total_floors + 1):
-                    current_floor = floor
+                for floor in range(self.current_floor + 1, self.total_floors + 1):
+                    General.moving(self.current_floor, floor)
+                    self.current_floor = floor
                     self.process_floor(floor)
                 direction = "down"
 
             elif direction == "down":
-                for floor in range(current_floor, 0, -1):
-                    current_floor = floor
+                for floor in range(self.current_floor - 1, 0, -1):
+                    General.moving(self.current_floor, floor)
+                    self.current_floor = floor
                     self.process_floor(floor)
                 direction = "up"
-
-        
