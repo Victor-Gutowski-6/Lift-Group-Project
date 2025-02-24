@@ -12,3 +12,9 @@ function scan (floor, queue)
 	return floor
 end function
 
+Create a list of all the floors
+Iterate throught that list stopping at every index
+Take requests from every floor
+	Put those requests into a queue
+	When the lift gets to that floor remove that amount of people
+When iterated through every element iterate through the list backwards.
