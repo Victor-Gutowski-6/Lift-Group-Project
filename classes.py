@@ -116,7 +116,7 @@ class MYLIFT:
     def is_empty(self):
         return len(self.heap) == 0
 
-    # THE NEXT FEW FUNCTIONS ARE FOR THE MYLIFT2 ALGORITHM! #
+    # THE NEXT FEW FUNCTIONS ARE FOR THE MYLIFT2 ALGORITHM!! #
 
     def FIFO_add_request(self,floor):
         
@@ -144,17 +144,18 @@ class MYLIFT:
 
 class General:  # This will be used in every algorithm so we dont care about its time complexity
 
-    @staticmethod
+    @staticmethod   # Prints the floors so the user knows which are available
     def print_floors():
         with open('info.json', 'r') as file:
             data = json.load(file)
         total_floors = data["TechnicalComponents"]["NumberOfFloors"]
         print("\n")
+        print("Floors available:")
         for f in range(1,total_floors+1):
             print(f,"\n")
     
     @staticmethod
-    def safety_checks(people_in_lift):
+    def safety_checks(people_in_lift):  # Makes sure everything is good before the lift moves off
         with open('info.json', 'r') as file:
             data = json.load(file)
         people_limit = data["TechnicalComponents"]["People_Limit"]
@@ -179,7 +180,7 @@ class General:  # This will be used in every algorithm so we dont care about its
     
     
     @staticmethod
-    def requests(lift,people_in_lift):
+    def requests(lift,people_in_lift):  # Collects the floor each person wants to go to upon entry and also checks if any floors have people waiting
         with open('info.json', 'r') as file:
             data = json.load(file)
         total_floors = data["TechnicalComponents"]["NumberOfFloors"]
@@ -358,6 +359,7 @@ class General:  # This will be used in every algorithm so we dont care about its
 from collections import deque
 class lift_algorithms:
     
+    # Initalising the variables
     def __init__(self):
         self.people_in_lift = 0
 
