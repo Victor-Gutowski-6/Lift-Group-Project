@@ -489,3 +489,47 @@ class lift_algorithms:
                     self.current_floor = floor
                     self.process_floor(floor)
                 direction = "up"
+
+    
+
+    def has_requests_above(self):
+        return any(floor > self.current_floor for floor in self.lift_queue)
+
+
+    def has_requests_below(self):
+        return any(floor < self.current_floor for floor in self.lift_queue)
+    
+
+    def LOOK_main(self):
+        direction = "up"
+
+        while True:
+            if direction == "up":
+                if not self.has_requests_above() and self.has_requests_below():
+                    direction = "down"
+                    continue
+
+                for floor in range(self.current_floor + 1, self.total_floors + 1):
+                    if not self.has_requests_above() and self.has_requests_below():
+                        direction = "down"
+                        break
+                    General.moving(self.current_floor, floor)
+                    self.current_floor = floor
+                    self.process_floor(floor)
+                else:
+                    direction = "down"
+
+            elif direction == "down":
+                if not self.has_requests_below() and self.has_requests_above():
+                    direction = "up"
+                    continue
+
+                for floor in range(self.current_floor - 1, 0, -1):
+                    if not self.has_requests_below() and self.has_requests_above():
+                        direction = "up"
+                        break
+                    General.moving(self.current_floor, floor)
+                    self.current_floor = floor
+                    self.process_floor(floor)
+                else:
+                    direction = "up"
