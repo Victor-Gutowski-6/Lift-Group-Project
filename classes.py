@@ -171,7 +171,7 @@ class General:  # This will be used in every algorithm so we dont care about its
         
     
     @staticmethod
-    def moving(current_floor, target_floor, delay=0):
+    def moving(current_floor, target_floor, delay=3):
         step = 1 if target_floor > current_floor else -1    # This is just so it doesn't repeat the floor its already on and enforces the direction its going in
         for floor in range(current_floor + step, target_floor + step, step):
             time.sleep(delay)
