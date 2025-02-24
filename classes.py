@@ -118,17 +118,14 @@ class MYLIFT:
 
     # THE NEXT FEW FUNCTIONS ARE FOR THE MYLIFT2 ALGORITHM! #
 
-    def FIFO_add_request(self,floor, people_in_lift):
-        if not General.safety_checks(people_in_lift):
-            print("Request denied: Over capacity!")
-            return None
+    def FIFO_add_request(self,floor):
         
         self.queue.append(floor)
         print(f"Request added for floor {floor}")
 
 
     def FIFO_is_empty(self):
-        return True if len(self.queue) == 0 else False
+        return len(self.queue) == 0
     
     
     def FIFO_get_next_floor(self):
@@ -136,7 +133,7 @@ class MYLIFT:
             data = json.load(file)    
         total_floors = data["TechnicalComponents"]["NumberOfFloors"]
         
-        if self.queue != []:
+        if not self.queue:
             return total_floors // 2
         
         return self.queue.pop(0)
@@ -270,8 +267,90 @@ class General:  # This will be used in every algorithm so we dont care about its
 
     # This is now the request function for the FIFO algortihm
     @ staticmethod
-    def FIFO_requests():
-        print("")
+    def FIFO_requests(lift,people_in_lift):
+        with open('info.json', 'r') as file:
+            data = json.load(file)
+        total_floors = data["TechnicalComponents"]["NumberOfFloors"]
+        people_limit = data["TechnicalComponents"]["People_Limit"]
+
+        try:
+            Internal_GettingOn = '0'
+            while Internal_GettingOn.lower() != 'yes' and Internal_GettingOn.lower() != 'no':
+                Internal_GettingOn = input("Are there people getting on, on this floor? ('yes' or 'no'): ")
+                continue
+            if Internal_GettingOn.lower() == 'yes':
+                Internal_People = int(input("How many people are getting on?: "))
+
+                while True:
+                    if not General.safety_checks(people_in_lift + Internal_People):
+                        print("Doors reopening - Too many people!\n")
+                        break
+                    else:
+                        total_people = people_in_lift + Internal_People
+
+                    for i in range(1,Internal_People+1):
+                        while True:
+                            try:
+                                Internal_Floor = int(input(f"Which floor is person {i} going to?: "))
+                                if Internal_Floor < 0 or Internal_Floor > total_floors:
+                                    print(f"Floor must be non negative and below floor {total_floors}" )
+                                    continue
+                                lift.FIFO_add_request(Internal_Floor)
+                                lift.add_passenger(Internal_Floor)
+                                break
+                            except ValueError:
+                                print("Invalid floor number. Please enter an integer.\n")
+                    
+                    people_in_lift = total_people
+                    print(f"{Internal_People} people got on. Total people now: {total_people}\n")
+                    break
+            
+            else:
+                print("No people boarding on this floor.\n")    
+
+        except ValueError:
+            print("Invalid input. Please enter number values where required.")
+
+
+        try:
+            if people_in_lift <= people_limit:  # Making sure there's even more space for more requests
+                External_GettingOn = '0'
+                while External_GettingOn != 'yes' and External_GettingOn != 'no':
+                    External_GettingOn = input("Are there people requesting the lift from other floors? ('yes' or 'no'): ")
+                    continue
+                if External_GettingOn == 'yes':
+                    while True:
+                        try:
+                            External_People = int(input("How many floors have people waiting?: "))
+                            break
+                        except ValueError:
+                            print("Invalid input. Please enter a number.\n")
+                    
+                    for f in range(1,External_People+1):
+                        if people_in_lift >= people_limit:
+                            print("Lift is at full capacity. Remaining requests cannot be processed.\n"  )
+                            break
+
+                        while True:
+                            try:
+                                pickup_floor = int(input(f"\nFloor {f}: Which floor are people waiting on?: " ))
+                                if pickup_floor < 0 or pickup_floor > total_floors:
+                                    print(f"Floor must be non-negative and below floor {total_floors}. Please try again.\n")
+                                    continue
+                                lift.FIFO_add_request(pickup_floor)
+                                people_in_lift += 1
+                                break
+                            except ValueError:
+                                print("Invalid floor number. Please enter an integer.\n")
+
+                            lift.FIFO_add_request(pickup_floor)
+                            people_in_lift += 1
+                            break
+
+        except ValueError:
+            print("Invalid input. Please enter number values where required.")
+
+        return people_in_lift
 
 
 
@@ -306,4 +385,30 @@ class lift_algorithms:
                 self.people_in_lift = general.requests(lift, self.people_in_lift)
 
                 if lift.is_empty():
+                    break
+
+    
+    def MYLIFT2_main(self):
+        
+        # Creating instances
+        general = General()
+        lift = MYLIFT()
+
+        while True:
+            self.people_in_lift = general.FIFO_requests(lift,self.people_in_lift)
+            if lift.FIFO_is_empty():
+                print("No requests.")
+
+            while not lift.FIFO_is_empty():
+                next_floor = lift.FIFO_get_next_floor()
+                general.moving(lift.current_floor, next_floor)
+                lift.current_floor = next_floor
+                print(f"Lift has arrived at floor {next_floor}.\n")
+
+                exiting = lift.remove_passengers()
+                self.people_in_lift -= exiting
+
+                self.people_in_lift = general.FIFO_requests(lift, self.people_in_lift)
+
+                if lift.FIFO_is_empty():
                     break

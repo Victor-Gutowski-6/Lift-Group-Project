@@ -1,8 +1,8 @@
 {
     "TechnicalComponents":
     {
-        "NumberOfFloors" : 5,
-        "People_Limit" : 4
+        "NumberOfFloors" : 10,
+        "People_Limit" : 10
         
     }
 }
